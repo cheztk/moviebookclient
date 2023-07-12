@@ -1,25 +1,29 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { GetCurrentUser, GetUser } from "../apicalls/users";
 import { message } from "antd";
 import {useNavigate} from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import { SetUser } from "../redux/usersSlice";
 
 function ProtectedRoute({children}) {
 
-    const [user, setUser] = useState(null);
+    const {user} =  useSelector(state => state.user);
+    const dispatch = useDispatch();
+
     const navigate = useNavigate();
 
     const getCurrentUser = async () => {
         try{
             const response = await GetUser();
             if(response.success){
-                setUser(response.data)
+                dispatch(SetUser(response.data))
             }else{
-                setUser(null)
+               dispatch(SetUser(null))
                 message.error(response.message)
             }
 
         }catch(error){
-            setUser(null);
+            dispatch(SetUser(null));
             message.error(error.message);
         }
     }

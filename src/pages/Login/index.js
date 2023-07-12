@@ -1,12 +1,13 @@
-import { Form, message} from 'antd';
+import { Form, message, Input} from 'antd';
 import Button from '../../components/Button';
 import {Link, useNavigate} from 'react-router-dom';
 import { LoginUser } from '../../apicalls/users';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 
 function Login() {
 
+    
     const navigate = useNavigate();
 
     const onFinish = async (value) => {
@@ -50,14 +51,22 @@ function Login() {
                 <Form.Item
                     label="Email"
                     name="email"
-                    rules={[{required: true, message: "Please input your email"}]}>
-                    <input type='email'/>
+                    rules={[
+                        {
+                            type: 'email',
+                            message: 'Please input valid email'
+                        },
+                        {
+                            required: true, 
+                            message: "Please input your email"}
+                    ]}>
+                    <Input/>
                 </Form.Item>
                 <Form.Item
                     label="Password"
                     name="password"
                     rules={[{required: true, message: "Please input your password"}]}>
-                        <input type='password'/>
+                        <Input.Password />
                     </Form.Item>
                     <div className='flex flex-col mt-2 gap-1'>
                         <Button title='Login'  type='submit'  fullWidth/>

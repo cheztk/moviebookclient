@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Form, message} from 'antd';
+import { Form, message,Input} from 'antd';
 import Button from '../../components/Button';
 import {Link, useNavigate} from 'react-router-dom';
 import { RegisterUser } from '../../apicalls/users';
@@ -41,19 +41,27 @@ function Register() {
                 label="Name"
                 name="name"
                 rules={[{required: true, message: "Please input your name"}]}>
-                <input type='text'/>
+                <Input type='text'/>
             </Form.Item>
             <Form.Item
                 label="Email"
                 name="email"
-                rules={[{required: true, message: "Please input your email"}]}>
-                <input type='email'/>
+                rules={[
+                    {
+                        type: 'email',
+                        message: 'Please input valid email'
+                    },
+                    {
+                        required: true, 
+                        message: "Please input your email"
+                    }]}>
+                <Input />
             </Form.Item>
             <Form.Item
                 label="Password"
                 name="password"
                 rules={[{required: true, message: "Please input your password"}]}>
-                    <input type='password'/>
+                    <Input.Password/>
                 </Form.Item>
                 <div className='flex flex-col mt-2 gap-1'>
                     <Button title='Register'  type='submit'  fullWidth/>

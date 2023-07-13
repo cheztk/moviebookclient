@@ -2,18 +2,21 @@ import { Form, message, Input} from 'antd';
 import Button from '../../components/Button';
 import {Link, useNavigate} from 'react-router-dom';
 import { LoginUser } from '../../apicalls/users';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { HideLoading, ShowLoading } from '../../redux/loadersSlice';
 
 
 function Login() {
 
-    
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const onFinish = async (value) => {
         try{
+            dispatch(ShowLoading());
             const response = await LoginUser(value);
-
+            dispatch(HideLoading());
             if(response.success){
 
                 localStorage.setItem("token", response.data);

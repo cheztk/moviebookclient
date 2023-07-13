@@ -9,10 +9,18 @@ import './stylesheets/custom-components.css';
 //import './stylesheets/text-elements.css';
 import './stylesheets/sizes.css';
 import './stylesheets/theme.css';
+import { useSelector } from 'react-redux';
 
 function App() {
+  const {loading} = useSelector((state)=>state.loaders )
   return (
-    <div >
+  <div >
+    {loading && (
+      <div className='loader-parent' >
+        <div className='loader' ></div>
+      </div>
+    )}  
+    
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<ProtectedRoute><Home/></ProtectedRoute>}/>

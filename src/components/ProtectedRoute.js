@@ -56,7 +56,9 @@ function ProtectedRoute({children}) {
                   <h1
                     className="text-sm underline"
                     onClick={() => {
+                        console.log("user admin ", user.isAdmin)
                       if (user.isAdmin) {
+                        
                         navigate("/admin");
                       } else {
                         navigate("/profile");

@@ -10,7 +10,9 @@ function Button({title, onClick, variant, disbled, fullWidth, type}) {
         className = className.replace('bg-primary', 'border border-primary text-primary bg-white')
     }
     return (
-        <button className={className} type={type}>
+        <button className={className} type={type} 
+            onClick={onClick} disabled={disbled}
+        >
             {title}
         </button>
     )

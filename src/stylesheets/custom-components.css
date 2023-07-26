@@ -20,6 +20,12 @@
   cursor: pointer;
 }
 
+.uppercase {
+  text-transform: uppercase;
+}
+i{
+  font-size: 22px;
+}
 
 .loader-parent {
   position: fixed;
@@ -43,6 +49,9 @@
 
 table{
   border: 1px solid #cdcdcd;
+}
+thead th {
+  background-color: #b1b1b1;
 }
 
 .br-3{

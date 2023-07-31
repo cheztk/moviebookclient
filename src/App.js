@@ -4,6 +4,8 @@ import Admin from './pages/Admin';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import TheatresForMovie from './pages/TheatresForMovie';
+import BookShow from './pages/BookShow';
 import ProtectedRoute from './components/ProtectedRoute';
 import './stylesheets/alignments.css';
 import './stylesheets/form-elements.css';
@@ -31,7 +33,23 @@ function App() {
             <ProtectedRoute>
               <Home/>
             </ProtectedRoute>
-          }/>   
+          }/>
+          <Route
+            path="/movie/:id"
+            element={
+              <ProtectedRoute>
+                <TheatresForMovie />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/book-show/:id"
+            element={
+              <ProtectedRoute>
+                <BookShow />
+              </ProtectedRoute>
+            }
+          />   
         <Route
             path="/profile"
             element={

@@ -1,15 +1,19 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ShowLoading, HideLoading } from "../../redux/loadersSlice";
 import { GetShowById } from "../../apicalls/theatres";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { message } from "antd";
 import moment from "moment";
+import StripeCheckout from 'react-stripe-checkout';
+import Button from "../../components/Button";
+import { MakePayment, BookShowTickets } from "../../apicalls/bookings";
 
 function BookShow() {
-
+    const {user} = useSelector(state => state.users);
     const dispatch = useDispatch();
     const params = useParams();
+    const navigate = useNavigate();
 
     const [show,setShow] = useState(null);
     const [selectedSeats, setSelectedSeats] = useState([]);
@@ -79,7 +83,49 @@ function BookShow() {
           </div>
         );
       };
+
+      const book = async (transactionId) => {
+        try {
+          dispatch(ShowLoading());
+          const response = await BookShowTickets({
+            show: params.id,
+            seats: selectedSeats,
+            transactionId,
+            user: user._id,
+          });
+          if (response.success) {
+            message.success(response.message);
+            navigate("/profile");
+          } else {
+            message.error(response.message);
+          }
+          dispatch(HideLoading());
+        } catch (error) {
+          message.error(error.message);
+          dispatch(HideLoading());
+        }
+      };
     
+      
+      const onToken = async (token) => {
+        try {
+          dispatch(ShowLoading());
+          const response = await MakePayment(
+            token,
+            selectedSeats.length * show.ticketPrice * 100
+          );
+          if (response.success) {
+            message.success(response.message);
+            book(response.data);
+          } else {
+            message.error(response.message);
+          }
+          dispatch(HideLoading());
+        } catch (error) {
+          message.error(error.message);
+          dispatch(HideLoading());
+        }
+      }
 
       useEffect(()=> {
         getData()
@@ -111,8 +157,32 @@ function BookShow() {
             
                   {/* seats */}
               <div className="flex justify-center mt-2">{getSeats()}</div>
+              {selectedSeats.length > 0 && (
+                    <div className="mt-2 flex justify-center gap-2 items-center flex-col">
+                        <div className="flex justify-center">
+                        <div className="flex uppercase card p-2 gap-3">
+                            <h1 className="text-sm"><b>Selected Seats</b> : {selectedSeats.join(" , ")}</h1>
+
+                            <h1 className="text-sm">
+                            <b>Total Price</b> : {selectedSeats.length * show.ticketPrice}
+                            </h1>
+                        </div>
+                        </div>
+                        <StripeCheckout
+                        token={onToken}
+                        amount={selectedSeats.length * show.ticketPrice * 100}
+                        currency="THB"
+                        billingAddress
+                        stripeKey="pk_test_u5xlK6DoIUVtmgZDVO2HWbSI00tL0olxYL"
+                        >
+                        <Button title="Book Now" />
+                        </StripeCheckout>
+                    </div>
+                )}
 
               </div>
+
+              
         )
               
     )
